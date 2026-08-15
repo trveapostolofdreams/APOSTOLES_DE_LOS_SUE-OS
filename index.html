@@ -16,24 +16,22 @@
         ====================================================================
     -->
     <style>
-        /* CIELO ESTRELLADO HIPER-POBLADO ESTILO HEAVEN'S GATE */
-        body {
+        /* CANVAS DE ESTRELLAS ANIMADO DE FONDO */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             background-color: #000000;
+        }
+
+        body {
             color: #b380ff;
             font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 20px;
-            background-image: 
-                radial-gradient(#ffffff, rgba(255,255,255,.3) 2px, transparent 20px),
-                radial-gradient(#ffff66, rgba(255,255,102,.25) 1px, transparent 15px),
-                radial-gradient(#00ffff, rgba(0,255,255,.3) 2px, transparent 20px),
-                radial-gradient(#ff3333, rgba(255,51,51,.25) 2px, transparent 12px),
-                radial-gradient(#cc66ff, rgba(204,102,255,.3) 1px, transparent 25px),
-                radial-gradient(#ffffff, rgba(255,255,255,.2) 1px, transparent 10px),
-                radial-gradient(#33ff66, rgba(51,255,102,.2) 2px, transparent 18px),
-                radial-gradient(#ff00ff, rgba(255,0,255,.2) 1px, transparent 15px);
-            background-size: 200px 200px, 150px 150px, 130px 130px, 90px 90px, 250px 250px, 70px 70px, 180px 180px, 110px 110px;
-            background-position: 0 0, 40px 60px, 90px 120px, 30px 10px, 110px 180px, 15px 85px, 60px 140px, 130px 30px;
         }
 
         .container {
@@ -41,8 +39,10 @@
             margin: 0 auto;
             border: 3px double #00ff66;
             padding: 25px;
-            background-color: rgba(0, 0, 0, 0.96);
-            box-shadow: 0 0 35px rgba(128, 0, 255, 0.5);
+            background-color: rgba(0, 0, 0, 0.92);
+            box-shadow: 0 0 35px rgba(128, 0, 255, 0.6);
+            position: relative;
+            z-index: 1;
         }
 
         /* PANEL DE REPRODUCTOR DE AUDIO RETRO */
@@ -60,7 +60,7 @@
         audio {
             margin-top: 8px;
             height: 32px;
-            filter: invert(100%); /* Estética oscura para el reproductor */
+            filter: invert(100%);
         }
 
         h1.main-title {
@@ -183,7 +183,6 @@
             text-decoration: none;
         }
 
-        /* TEXTO INVISIBLE (SELECCIONAR CON EL RATÓN PARA LEER) */
         .invisible-text {
             color: #000000;
             user-select: text;
@@ -203,7 +202,6 @@
             margin: 10px 0;
         }
 
-        /* ESTILO DEL BOTÓN ALEATORIO DEL LABERINTO */
         .random-portal-box {
             border: 2px dashed #00ff66;
             background-color: #05000a;
@@ -244,7 +242,7 @@
         }
     </style>
 
-    <!-- SCRIPT DE NAVEGACIÓN ALEATORIA / LABERINTO -->
+    <!-- SCRIPT DE SALTO ALEATORIO -->
     <script>
         function intentarEscapar() {
             var azar = Math.floor(Math.random() * 10) + 1;
@@ -260,6 +258,9 @@
     </script>
 </head>
 <body>
+
+<!-- LIENZO DE ESTRELLAS PARPADEANTES EN JS -->
+<canvas id="starfield"></canvas>
 
 <div class="container">
 
@@ -373,7 +374,7 @@
             <div class="img-container">
                 <img src="imagenes/llavecomunal.jpg" alt="Llave Comunal" style="max-width:280px;">
             </div>
-            <a href="artefactos.html">&gt;&gt; Inspeccionar frascos de alcanfor (.html)</a>
+            <a href="museo1.html">&gt;&gt; Inspeccionar frascos de alcanfor (.html)</a>
         </div>
 
         <!-- RUTA 4 -->
@@ -522,6 +523,71 @@
     </footer>
 
 </div>
+
+<!-- GENERADOR DE ESTRELLAS CAÓTICAS Y PARPADEANTES -->
+<script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [];
+    const numStars = 400; // Cantidad de estrellas en pantalla
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Paleta de colores astronómicos lo-fi
+    const colors = ['#ffffff', '#ffff99', '#00ffff', '#ff66ff', '#8000ff', '#66ff66'];
+
+    // Inicializar estrellas aleatorias
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.8 + 0.2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: Math.random(),
+            speed: Math.random() * 0.02 + 0.005, // Velocidad de parpadeo
+            increasing: Math.random() > 0.5
+        });
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+            // Manejo del parpadeo (fade in / fade out aleatorio)
+            if (star.increasing) {
+                star.alpha += star.speed;
+                if (star.alpha >= 1) {
+                    star.alpha = 1;
+                    star.increasing = false;
+                }
+            } else {
+                star.alpha -= star.speed;
+                if (star.alpha <= 0.1) {
+                    star.alpha = 0.1;
+                    star.increasing = true;
+                }
+            }
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fillStyle = star.color;
+            ctx.globalAlpha = star.alpha;
+            ctx.fill();
+        });
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(render);
+    }
+
+    render();
+</script>
 
 </body>
 </html>

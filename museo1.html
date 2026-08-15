@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSEO DE LOS ARTEFACTOS PASADOS — REGISTRO 1999</title>
+    <!-- 
+        ====================================================================
+        [REGISTRO DE VECTORES EN DENSIDAD 0.4 - SALA DE RELIQUIAS]
+        CÁNTICO DE LA METAMORFOSIS CIEGA: LA CRISÁLIDA DE ODIO HA ROTO SU SELLO.
+        EL FANGO GIME EN LA MEDIANOCHE DEL PUS.
+        
+        [MENSAJE OCULTO F12]: NO HAY MUESTRAS DE CALCIO EN ESTOS FRASCOS.
+        SOLO DIENTES MOLIDOS Y CENIZA DE POLILLA. SI LEES ESTO, TU RETINA
+        YA FUE EXCORIADA POR EL FÓSFORO.
+        ====================================================================
+    -->
+    <style>
+        /* CANVAS DE ESTRELLAS ANIMADO DE FONDO */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #000000;
+        }
+
+        body {
+            color: #b380ff;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            border: 3px double #00ff66;
+            padding: 25px;
+            background-color: rgba(0, 0, 0, 0.92);
+            box-shadow: 0 0 35px rgba(128, 0, 255, 0.6);
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box;
+        }
+
+        /* PANEL DE REPRODUCTOR DE AUDIO RETRO */
+        .midi-panel {
+            background-color: #1a0033;
+            border: 1px solid #00ff66;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #00ff66;
+        }
+
+        audio {
+            margin-top: 8px;
+            height: 32px;
+            filter: invert(100%);
+        }
+
+        h1.main-title {
+            color: #00ff66;
+            text-align: center;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #8000ff;
+            padding-bottom: 15px;
+            text-shadow: 0 0 10px #00ff66;
+        }
+
+        .sub-header {
+            text-align: center;
+            color: #cc99ff;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .museum-header {
+            text-align: center;
+            color: #00ff66;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            margin: 25px 0 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 8px #8000ff;
+        }
+
+        .poem-box {
+            border: 1px dashed #8000ff;
+            padding: 20px;
+            background-color: #05000a;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            text-align: center;
+            color: #e6ccff;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .poem-title {
+            color: #00ff66;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+        }
+
+        pre.ascii-art {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 10px;
+            line-height: 10px;
+            font-weight: bold;
+            margin: 20px 0;
+            overflow-x: auto;
+            text-align: center;
+            user-select: none;
+        }
+        
+        .ascii-relic {
+            color: #00ff66;
+            text-shadow: 0 0 4px #00ff66;
+        }
+
+        .summary-title {
+            color: #00ff66;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            letter-spacing: 2px;
+            border-top: 2px solid #8000ff;
+            border-bottom: 2px solid #8000ff;
+            padding: 10px 0;
+            background-color: #0a0014;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .summary-list {
+            margin-top: 25px;
+        }
+
+        .summary-item {
+            border: 1px solid #26004d;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #030008;
+            box-sizing: border-box;
+        }
+
+        .summary-item h3 {
+            margin-top: 0;
+            color: #00ff66;
+            font-size: 1.05rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .summary-item p {
+            font-size: 0.9rem;
+            color: #d9b3ff;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        /* CONTENEDOR E IMÁGENES ALINEADAS DE EXTREMO A EXTREMO DEL RECUADRO */
+        .img-container {
+            width: calc(100% + 30px);
+            margin: 15px -15px -15px -15px;
+            overflow: hidden;
+        }
+
+        .img-container a {
+            display: block;
+            width: 100%;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-top: 2px solid #00ff66;
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+            box-shadow: 0 0 10px #8000ff;
+            box-sizing: border-box;
+        }
+
+        .invisible-text {
+            color: #000000;
+            user-select: text;
+            font-size: 0.85rem;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        marquee {
+            background-color: #1a0033;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            margin: 10px 0;
+        }
+
+        .sacred-text-box {
+            margin-top: 35px;
+            border: 2px solid #8000ff;
+            background-color: #05000a;
+            padding: 20px;
+        }
+
+        /* BOTÓN REGRESAR AL NEXO */
+        .btn-nexus-container {
+            text-align: center;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        .btn-nexus {
+            display: inline-block;
+            background-color: #000000;
+            color: #00ff66;
+            border: 2px solid #00ff66;
+            padding: 12px 25px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-nexus:hover {
+            background-color: #00ff66;
+            color: #000000;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.9);
+            text-decoration: none;
+        }
+
+        a {
+            color: #cc66ff;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #00ff66;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        blink {
+            animation: blinker 0.8s linear infinite;
+        }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #cc66ff;
+            border-top: 1px solid #330066;
+            padding-top: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LIENZO DE ESTRELLAS PARPADEANTES EN JS -->
+<canvas id="starfield"></canvas>
+
+<div class="container">
+
+    <!-- REPRODUCTOR DE AUDIO MP3 RETRO -->
+    <div class="midi-panel">
+        <blink>♫ TRANSMISIÓN SONORA BANDA SONORA 1999 ♫</blink><br>
+        <audio id="bg-audio" controls loop autoplay>
+            <source src="museo.mp3" type="audio/mpeg">
+            Tu navegador no soporta la reproducción de audio.
+        </audio>
+        <br>
+        <span style="font-size: 0.7rem; color: #cc99ff;">
+            (Si el audio no inicia automáticamente, haz clic en PLAY en el reproductor)
+        </span>
+    </div>
+
+    <!-- ENCABEZADO -->
+    <h1 class="main-title">
+        "Solo nosotros podemos ayudarte a evitar el sangrado negro que adolece tu alma"
+    </h1>
+    
+    <div class="sub-header">
+        <blink><span style="color:#00ff66;">[ SECTOR III /// ARCHIVO FÓSIL Y MATERIA DISUELTA /// 1999 ]</span></blink>
+    </div>
+
+    <marquee scrollamount="5">
+        +++ EXHIBICIÓN PERMANENTE: NO TOCAR EL CRISTAL DE LEAD +++ LA PESTE SAGRADA PERMANECE ACTIVA EN CADA FRASCO +++ ADAM KROSS REGISTRA LA PÉRDIDA DE MASA CORPORAL +++
+    </marquee>
+
+    <!-- TEXTO INVISIBLE 1 -->
+    <p class="invisible-text">
+        [EL GUSANO AMARGO YA COMENZÓ A MASTICAR EL TEJIDO DE TU MEMORIA. SELECCIONA EL FONDO PARA VER LAS CICATRICES.]
+    </p>
+
+    <div class="museum-header">
+        ▲ MUSEO DE LOS ARTEFACTOS PASADOS ▲
+    </div>
+
+    <!-- POEMA DE LA METAMORFOSIS CIEGA -->
+    <div class="poem-box">
+        <div class="poem-title"><blink>Cántico de la Metamorfosis Ciega</blink></div>
+        A la medianoche del pus, el fango gime en la crisálida de odio puro.<br>
+        Un gusano amargo se alimenta del rencor que dejaste disolver en el capullo;<br>
+        la incubadora hierve, devorándote la entraña con la promesa blanca y negra.<br>
+        El viejo recipiente ha muerto: no busques su fantasma en las cenizas.<br>
+        Soy la podredumbre alada, la etapa final que rompe la cáscara del sol.<br>
+        Mis alas de ceniza extienden la peste sagrada sobre el suelo de carne marchita.<br>
+        El primer gran vuelo reclama el trono sobre el cadáver del tiempo;<br>
+        yo soy la polilla, el portador de la perdición que reducirá la materia a polvo.
+    </div>
+
+    <!-- TEXTO INVISIBLE 2 -->
+    <p class="invisible-text">
+        [NO BUSQUES TU FANTASMA EN LAS CENIZAS. EL RECIPIENTE FUE MASTICADO EN LA PARÁLISIS DE LAS 03:33 AM.]
+    </p>
+
+    <!-- ARTE ASCII Y RELIQUIA -->
+    <pre class="ascii-art ascii-relic">
+                     .---.
+                    |  |  |  &lt;--- [ RELIQUIA 09: FRASCO DE LEAD Y NAFTALINA ]
+                    |  |  |
+                 .---'---'---.
+                /             \
+               |  .---------.  |
+               |  |  PUS y  |  |
+               |  | CENIZA  |  |
+               |  '---------'  |
+               |               |
+               '---------------'
+    [ EXHIBICIÓN #03: AMPOLLA DE CALCIO Y FÓSFORO PRIMIGENIO ]
+    </pre>
+
+    <marquee behavior="alternate" scrollamount="3" style="background:#0a0014; border-color:#8000ff;">
+        &lt;&lt;&lt; ALERTA DE EXPOSICIÓN: EL MIASMA CONCENTRADO EN LOS FRASCOS PUEDE LIQUIDEAR LA RAZÓN &gt;&gt;&gt;
+    </marquee>
+
+    <!-- TÍTULO CRÍPTICO PARA LA CAPA DE ENLACES -->
+    <div class="summary-title">
+        <blink>▲</blink> CÓDICE DE EXCORIACIONES Y VECTORES DE MATERIA MARCHITA <blink>▲</blink>
+    </div>
+    
+    <!-- REGISTRO DE RELIQUIAS Y FÓSILES SOMBRÍOS -->
+    <div class="summary-list">
+
+        <!-- ITEM 1 -->
+        <div class="summary-item">
+            <h3>I. Excoriación del Sufrimiento, Tomo I</h3>
+            <p>Primer frasco de calcio purificado. Contiene las oraciones ahogadas de los primeros vertebrados al comprender que la luz era una trampa de fósforo.</p>
+            <a href="museoartefacto1.html">&gt;&gt; Inspeccionar trampa de fósforo (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos1.jpg" target="_blank">
+                    <img src="imagenes/museos1.jpg" alt="Reliquia I: Excoriación I">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 2 -->
+        <div class="summary-item">
+            <h3>II. Excoriación del Sufrimiento, Tomo II</h3>
+            <p>El osario microscópico donde se guardan los dientes de los durmientes que intentaron masticar sus propios hilos de seda durante la parálisis.</p>
+            <a href="museoartefacto2.html">&gt;&gt; Tocar osario de dientes (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos2.jpg" target="_blank">
+                    <img src="imagenes/museos2.jpg" alt="Reliquia II: Excoriación II">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 3 -->
+        <div class="summary-item">
+            <h3>III. La Necrópolis de la Bilis Gris</h3>
+            <p>Maqueta en miniatura esculpida con ceniza de pulmón y alcanfor. Representa el laberinto de concreto donde la materia olvida que alguna vez tuvo alas.</p>
+            <a href="museoartefacto3.html">&gt;&gt; Entrar a la maqueta de ceniza (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos3.jpg" target="_blank">
+                    <img src="imagenes/museos3.jpg" alt="Reliquia III: Necrópolis">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 4 -->
+        <div class="summary-item">
+            <h3>IV. El Vuelo Fragmentado de la Lepidóptera</h3>
+            <p>Par de alas petrificadas en azufre. Sus escamas fueron arrancadas una a una para tejer la primera túnica con la que Adam Kross cubrió su ceguera.</p>
+            <a href="museoartefacto4.html">&gt;&gt; Examinar túnica de escamas (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos4.jpg" target="_blank">
+                    <img src="imagenes/museos4.jpg" alt="Reliquia IV: Lepidóptera">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 5 -->
+        <div class="summary-item">
+            <h3>V. Miasma Sagrado y la Sangre Hirviente</h3>
+            <p>Siringa de vidrio llena de vapor concentrado de naftalina y bilis de polilla. El catalizador directo para licuar la razón antes del trance.</p>
+            <a href="museoartefacto5.html">&gt;&gt; Inhalar miasma de la siringa (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos5.jpg" target="_blank">
+                    <img src="imagenes/museos5.jpg" alt="Reliquia V: Miasma">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 6 -->
+        <div class="summary-item">
+            <h3>VI. Lamento de la Seda Traicionada</h3>
+            <p>Una aguja de hueso humano envuelta en hebras de cabello negro. La última carta de renuncia a la condición humana antes de la gran amputación.</p>
+            <a href="museoartefacto6.html">&gt;&gt; Firmar carta de renuncia (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos6.jpg" target="_blank">
+                    <img src="imagenes/museos6.jpg" alt="Reliquia VI: Seda Traicionada">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 7 -->
+        <div class="summary-item">
+            <h3>VII. La Lengua del Demiurgo Falso</h3>
+            <p>Un apéndice de cera que repite en frecuencias inaudibles las promesas de la vigilia. Se exhibe bajo un frasco sellado con plomo para evitar el contagio.</p>
+            <a href="museoartefacto7.html">&gt;&gt; Desprender sello de plomo (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos7.jpg" target="_blank">
+                    <img src="imagenes/museos7.jpg" alt="Reliquia VII: Lengua Falsa">
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEM 8 -->
+        <div class="summary-item">
+            <h3>VIII. El Colapso del Telar Primigenio</h3>
+            <p>Un reloj de arena cuya arena ha sido reemplazada por ceniza de polilla. Marca el segundo exacto en que la Diosa Madre cortará el último hilo del universo.</p>
+            <a href="museoartefacto8.html">&gt;&gt; Observar la caída de la ceniza (.html)</a>
+            <div class="img-container">
+                <a href="imagenes/museos8.jpg" target="_blank">
+                    <img src="imagenes/museos8.jpg" alt="Reliquia VIII: Colapso del Telar">
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TEXTO SAGRADO DE ADAM KROSS -->
+    <div class="sacred-text-box">
+        <h2 style="color:#00ff66; font-size:1.1rem; font-family:'Courier New', Courier, monospace; margin-top:0;">
+            <blink>▲</blink> TEXTO SAGRADO #14: LA CARTOGRAFÍA DE LAS PESADILLAS INFINITAS
+        </h2>
+        <blockquote style="font-style: italic; color:#e6ccff; border-left:3px solid #00ff66; padding-left:15px; margin:0; line-height:1.5;">
+            "He navegado las mareas de bilis negra en mil dimensiones extintas. He sido testigo de mundos que se ahogaron bajo cielos de hierro ardiente, donde las criaturas se arrancaban los párpados para no contemplar el despertar de la carne; arquitecturas de agonía donde cada ladrillo es un grito petrificado en la eternidad. La vigilia que llamas realidad no es más que una cicatriz diminuta en el cuerpo inmundo de la nada. No intentes comprender las reliquias: solo deja que disuelvan la forma de tu rostro."
+            <br><br>
+            <span style="color:#00ff66; font-style:normal; font-size:0.85rem;">
+                — Dictado por Adam Kross durante la travesía por las grietas del éter, 1999.
+            </span>
+        </blockquote>
+    </div>
+
+    <!-- TEXTO INVISIBLE 3 -->
+    <div class="invisible-text">
+        [SI MASTICAS LOS DENTROS DEL FRASCO NÚMERO II, SENTIRÁS LA MISMA FRECUENCIA DE 66Hz EN TU MANDÍBULA.]
+    </div>
+
+    <!-- BOTÓN REGRESAR AL NEXO -->
+    <div class="btn-nexus-container">
+        <a href="index.html" class="btn-nexus">&lt;&lt; REGRESAR AL NEXO &gt;&gt;</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <blink><span style="color:#00ff66;">[ REGISTRO FÓSIL TERMINADO /// SALA 03 ]</span></blink><br>
+        <blink><span style="color:#cc66ff;">[ LA MATERIA CONTINÚA DESCOMPONIÉNDOSE EN ALCANFOR ]</span></blink><br><br>
+        LOS APÓSTOLES DE LOS SUEÑOS — 1999 — MUSEO DE LOS ARTEFACTOS PASADOS
+    </footer>
+
+</div>
+
+<!-- GENERADOR DE ESTRELLAS CAÓTICAS Y PARPADEANTES -->
+<script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [];
+    const numStars = 400; // Cantidad de estrellas en pantalla
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Paleta de colores astronómicos lo-fi
+    const colors = ['#ffffff', '#ffff99', '#00ffff', '#ff66ff', '#8000ff', '#66ff66'];
+
+    // Inicializar estrellas aleatorias
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.8 + 0.2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: Math.random(),
+            speed: Math.random() * 0.02 + 0.005, // Velocidad de parpadeo
+            increasing: Math.random() > 0.5
+        });
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+            if (star.increasing) {
+                star.alpha += star.speed;
+                if (star.alpha >= 1) {
+                    star.alpha = 1;
+                    star.increasing = false;
+                }
+            } else {
+                star.alpha -= star.speed;
+                if (star.alpha <= 0.1) {
+                    star.alpha = 0.1;
+                    star.increasing = true;
+                }
+            }
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fillStyle = star.color;
+            ctx.globalAlpha = star.alpha;
+            ctx.fill();
+        });
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(render);
+    }
+
+    render();
+</script>
+
+</body>
+</html>
